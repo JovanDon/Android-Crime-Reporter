@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -176,22 +177,26 @@ public class MainActivity extends AppCompatActivity {
             uploadBitmap(thumbnail);
             saveImage(thumbnail);
             Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
-        }else if (requestCode == CAMERA_RECORD_VIDEO) {
+        }else if (requestCode == CAMERA_RECORD_VIDEO || requestCode == GALLERY_RECORD_VIDEO) {
 
 
-            //videoview.setVideoURI(contentURI);
-            Uri contentURI=data.getData();
-            videoview.setVideoPath(contentURI.toString());
+            try
+            {
+                String path = data.getData().toString();
+                videoview.setVideoPath(path);
+                MediaController mediaController = new
+                        MediaController(this);
+                mediaController.setAnchorView(videoview);
+                videoview.setMediaController(mediaController);
 
+                videoview.start();
 
+            }
+            catch(Exception ex)
+            {
+                ex.printStackTrace();
+            }
 
-
-            Toast.makeText(MainActivity.this, "Video Saved!", Toast.LENGTH_SHORT).show();
-        }else if (requestCode == GALLERY_RECORD_VIDEO) {
-            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-            imageview.setImageBitmap(thumbnail);
-            saveImage(thumbnail);
-            Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -218,7 +223,8 @@ public class MainActivity extends AppCompatActivity {
         pictureDialog.show();
     }
     private void chooseVideoFromGallary(){
-        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("video/*");
         startActivityForResult(intent, GALLERY_RECORD_VIDEO);
     }
     private void takeVideoFromCamera(){

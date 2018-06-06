@@ -175,7 +175,8 @@
                         android:id="@+id/videoview"
                         android:layout_width="match_parent"
                         android:layout_height="194dp"
-                        android:background="@color/colorPrimary"></VideoView>
+                        android:background="@color/colorPrimary"
+                        android:visibility="visible"></VideoView>
 
                 </LinearLayout>
 
