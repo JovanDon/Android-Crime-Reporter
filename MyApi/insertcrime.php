@@ -3,7 +3,7 @@
     define('DB_HOST','localhost');
 	define('DB_USER','root');
 	define('DB_PASS','');
-	define('DB_NAME','crimes');
+	define('DB_NAME','crimedb');
 	define('UPLOAD_PATH', 'uploads/');
 //connecting to database 
 	$con = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME) or die('Unable to connect');
@@ -12,15 +12,15 @@
     $attachment ="";// $_POST['attachment'];
     $type = $_POST['type'];
     $description = $_POST['description'];
-	 $lat = $_POST['lati'];
-	 $longi = $_POST['longi'];
+	 $location = $_POST['loc'];
+	 $phone_number = $_POST['phone'];
     $status = "pending for response";
 $file=$_FILES['pic']['name'];
 
 
     $sql = "INSERT INTO crimes
-            (type,description,imagelink,lat,longi) 
-        VALUES ('$type','$description','$file',".$lat .",". $longi.")";
+            (title,description,image,location,phone_number) 
+        VALUES ('$type','$description','$file','".$location ."','". $phone_number."')";
  
 	
 	

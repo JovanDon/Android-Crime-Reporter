@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinner;
     private Uri filePath;
     EditText location;
-
     EditText description;
     private DBHelper mydb ;
 
@@ -291,11 +290,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void uploadBitmap(final Bitmap bitmap) {
-Cursor cursor=mydb.getData(1);
+Cursor cursor=mydb.getData();
         cursor.moveToFirst();
-        final String phone_=cursor.getString(cursor.getColumnIndex(DBHelper.CONTACTS_COLUMN_EMAIL));
+
         //getting the tag from the edittext
         final String description_ = description.getText().toString().trim();
+        final String phone_ = cursor.getString(cursor.getColumnIndex(DBHelper.CONTACTS_COLUMN_EMAIL));
         final String location_ = location.getText().toString().trim();
         final String type_ = spinner.getSelectedItem().toString();
 
