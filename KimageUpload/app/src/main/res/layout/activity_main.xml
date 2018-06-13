@@ -74,13 +74,24 @@
                     android:inputType="textMultiLine" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/phonelayout"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/descriptionlayout"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/locationlayout"
                 android:layout_height="60dp"
                 android:layout_width="wrap_content"
                 android:orientation="vertical"
-                android:layout_below="@+id/descriptionlayout"
+                android:layout_below="@+id/phonelayout"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true">
                 <TextView

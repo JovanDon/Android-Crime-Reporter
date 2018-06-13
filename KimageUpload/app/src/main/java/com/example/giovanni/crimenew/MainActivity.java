@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinner;
     private Uri filePath;
     EditText location;
-    EditText phone;
+
     EditText description;
     private DBHelper mydb ;
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.button);
         description=(EditText) findViewById(R.id.description);
         location=(EditText) findViewById(R.id.locationEd);
-        phone=(EditText) findViewById(R.id.phoneEd);
+
         imageview = (ImageView) findViewById(R.id.iv);
         videoview=(VideoView) findViewById(R.id.videoview);
 
