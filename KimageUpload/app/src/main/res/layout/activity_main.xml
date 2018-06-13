@@ -75,6 +75,36 @@
             </LinearLayout>
 
 
+            <LinearLayout
+                android:id="@+id/locationlayout"
+                android:layout_height="60dp"
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/descriptionlayout"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
+                <TextView
+                    android:id="@+id/locationtextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:text="Location"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    />
+
+                <EditText
+                    android:id="@+id/locationEd"
+                    android:layout_width="374dp"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/textView"
+                    android:background="@color/colorPrimary"
+                    android:ems="10"
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+
+
 
 
 
@@ -82,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_below="@+id/descriptionlayout"
+                android:layout_below="@+id/locationlayout"
                 android:id="@+id/linearLayout">
                 <LinearLayout
                     android:id="@+id/layoutphotoes"

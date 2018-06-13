@@ -3,7 +3,7 @@ package com.example.giovanni.crimenew;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -44,23 +44,19 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private Button btn,vbtn;
+    private Button btn,vbtn,btnsubmit;
     private ImageView imageview;
     private VideoView videoview;
     private static final String IMAGE_DIRECTORY = "/demonuts";
     private int GALLERY = 1, CAMERA = 2,CAMERA_RECORD_VIDEO=3,GALLERY_RECORD_VIDEO=4;
-    public static final String UPLOAD_URL = "http://localhost/crimeData/picker.php";
-    public static final String UPLOAD_KEY = "image";
-    private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
     ProgressDialog progress_bar;
     Spinner spinner;
     private Uri filePath;
-    double longitude=32.5674789;
-    double latitude=0.3372744;
+    EditText location;
+    EditText phone;
     EditText description;
-    SharedPreferences sharedpreferences;
-
+    private DBHelper mydb ;
 
 
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
@@ -81,8 +77,12 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
 
+
+       btnsubmit=(Button) findViewById(R.id.buttonUpload);
         btn = (Button) findViewById(R.id.button);
         description=(EditText) findViewById(R.id.description);
+        location=(EditText) findViewById(R.id.locationEd);
+        phone=(EditText) findViewById(R.id.phoneEd);
         imageview = (ImageView) findViewById(R.id.iv);
         videoview=(VideoView) findViewById(R.id.videoview);
 
@@ -101,7 +101,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnsubmit.setOnClickListener( new View.OnClickListener(){
 
+            @Override
+            public void onClick(View v) {
+                uploadBitmap(bitmap);
+            }
+        });
 
         //checking the permission
         //if the permission is not given we will open setting to add permission
@@ -163,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                     String path = saveImage(bitmap);
                     Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
                     imageview.setImageBitmap(bitmap);
-                    uploadBitmap(bitmap);
+                    this.bitmap=bitmap;
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -174,7 +180,8 @@ public class MainActivity extends AppCompatActivity {
         } else if (requestCode == CAMERA) {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             imageview.setImageBitmap(thumbnail);
-            uploadBitmap(thumbnail);
+
+            this.bitmap=thumbnail;
             saveImage(thumbnail);
             Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }else if (requestCode == CAMERA_RECORD_VIDEO || requestCode == GALLERY_RECORD_VIDEO) {
@@ -284,9 +291,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void uploadBitmap(final Bitmap bitmap) {
-
+Cursor cursor=mydb.getData(1);
+        cursor.moveToFirst();
+        final String phone_=cursor.getString(cursor.getColumnIndex(DBHelper.CONTACTS_COLUMN_EMAIL));
         //getting the tag from the edittext
         final String description_ = description.getText().toString().trim();
+        final String location_ = location.getText().toString().trim();
         final String type_ = spinner.getSelectedItem().toString();
 
 
@@ -322,8 +332,8 @@ public class MainActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("type", type_);
                 params.put("description", description_);
-                params.put("lati", latitude+"");
-                params.put("longi", longitude+"");
+                params.put("phone", phone_);
+                params.put("loc", location_);
                 return params;
             }
 
