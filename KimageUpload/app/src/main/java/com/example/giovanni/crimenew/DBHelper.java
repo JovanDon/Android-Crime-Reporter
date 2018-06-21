@@ -15,8 +15,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "MyDB.db";
     public static final String CONTACTS_TABLE_NAME = "contacts";
     public static final String CONTACTS_COLUMN_ID = "id";
-    public static final String CONTACTS_COLUMN_EMAIL = "email";
+    public static final String CONTACTS_COLUMN_PHONE = "phone";
     public static final String CONTACTS_COLUMN_PASSWORD = "password";
+    public static final String CONTACTS_COLUMN_LOGIN = "login";
+
     private HashMap hp;
 
     public DBHelper(Context context) {
@@ -28,7 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         db.execSQL(
                 "create table contacts " +
-                        "(id integer primary key,email text,password text)"
+                        "(id integer primary key,phone text,password text, login INTEGER DEFAULT 0)"
         );
     }
 
@@ -39,20 +41,27 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertContact (String email,String password) {
+    public boolean insertContact (String phone,String password) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("id", 1);
-        contentValues.put("email", email);
-        contentValues.put("password", password);
-        db.insert("contacts", null, contentValues);
+        contentValues.put(CONTACTS_COLUMN_PHONE, phone);
+        contentValues.put(CONTACTS_COLUMN_PASSWORD, password);
+        contentValues.put(CONTACTS_COLUMN_LOGIN, 1);
+        db.insertOrThrow("contacts", null, contentValues);
         return true;
     }
 
-    public Cursor getData() {
+    public Cursor getData(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from contacts ", null );
+        Cursor res =  db.rawQuery( "select * from contacts where id="+id+"", null );
         return res;
+    }
+
+    public Boolean isLoggedIn(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from contacts where id="+id+" and login=1", null );
+        return res.getCount()>0;
     }
 
     public int numberOfRows(){
@@ -61,12 +70,31 @@ public class DBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean updateContact (Integer id, String email,String password) {
+    public boolean updateContact (Integer id, String phone,String password) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("email", email);
+        contentValues.put("phone", phone);
         contentValues.put("password", password);
         db.update("contacts", contentValues, "id = ? ", new String[] { Integer.toString(id) } );
+        return true;
+    }
+
+    public boolean checkifexists ( String phone_,String password_) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String[] columns ={"phone", "password"};
+       Cursor res=db.query("contacts", columns, "phone = ?  and  password = ?", new String[] {phone_, password_ } ,null,null,null);
+
+        return res.getCount()>0;
+    }
+
+    public boolean updateUserLogout (int flag) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Integer id=1;
+        ContentValues cv = new ContentValues();
+        cv.put(CONTACTS_COLUMN_LOGIN, flag);
+
+        db.update("contacts", cv, "id = ? ", new String[] { Integer.toString(id) } );
         return true;
     }
 
@@ -86,7 +114,7 @@ public class DBHelper extends SQLiteOpenHelper {
         res.moveToFirst();
 
         while(res.isAfterLast() == false){
-            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_EMAIL)));
+            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_PHONE)));
             res.moveToNext();
         }
         return array_list;

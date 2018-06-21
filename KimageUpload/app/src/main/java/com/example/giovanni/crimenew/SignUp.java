@@ -3,6 +3,7 @@ package com.example.giovanni.crimenew;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -28,54 +29,40 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
-
-
-import android.content.Intent;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-    private DBHelper mydb ;
+    /**
+     * Id to identity READ_CONTACTS permission request.
+     */
     private static final int REQUEST_READ_CONTACTS = 0;
+    private DBHelper mydb ;
+    Cursor DataCursor;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private AutoCompleteTextView mPhoneView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    Cursor DataCursor;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mydb = new DBHelper(this);
-         DataCursor = mydb.getData(1);
-// if account exists go  to Main activity directly
-    if (mydb.isLoggedIn(1)){
-
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-    }
-
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_sign_up);
         // Set up the login form.
-     // Toast.makeText(LoginActivity.this,DataCursor.getCount( )+"", Toast.LENGTH_LONG).show();
-
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.phone);
+        mPhoneView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -83,36 +70,36 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptsignup();
                     return true;
                 }
                 return false;
             }
         });
 
-Button signupbutton= (Button)  findViewById(R.id.gotosignup);
-signupbutton.setOnClickListener(new OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        Intent intent = new Intent(LoginActivity.this, SignUp.class);
-        startActivity(intent);
-        finish();
+        Button SignInButton = (Button) findViewById(R.id.sign_in_button);
+        SignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SignUp.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
-    }
-});
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+
+
+    Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptsignup();
             }
         });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
-
     }
 
     private void populateAutoComplete() {
@@ -131,7 +118,7 @@ signupbutton.setOnClickListener(new OnClickListener() {
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(mPhoneView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -164,17 +151,17 @@ signupbutton.setOnClickListener(new OnClickListener() {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptsignup() {
         if (mAuthTask != null) {
             return;
         }
 
         // Reset errors.
-        mEmailView.setError(null);
+        mPhoneView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String email = mPhoneView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -189,12 +176,12 @@ signupbutton.setOnClickListener(new OnClickListener() {
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+            mPhoneView.setError(getString(R.string.error_field_required));
+            focusView = mPhoneView;
             cancel = true;
         } else if (!isPhoneValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+            mPhoneView.setError(getString(R.string.error_invalid_email));
+            focusView = mPhoneView;
             cancel = true;
         }
 
@@ -212,13 +199,13 @@ signupbutton.setOnClickListener(new OnClickListener() {
     }
 
 
-    public boolean isPhoneValid(CharSequence phone) {
-        if (TextUtils.isEmpty(phone)) {
-            return false;
-        } else {
-            return android.util.Patterns.PHONE.matcher(phone).matches();
+        public boolean isPhoneValid(CharSequence phone) {
+            if (TextUtils.isEmpty(phone)) {
+                return false;
+            } else {
+                return android.util.Patterns.PHONE.matcher(phone).matches();
+            }
         }
-    }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
@@ -298,10 +285,10 @@ signupbutton.setOnClickListener(new OnClickListener() {
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
+                new ArrayAdapter<>(SignUp.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        mEmailView.setAdapter(adapter);
+        mPhoneView.setAdapter(adapter);
     }
 
 
@@ -321,12 +308,12 @@ signupbutton.setOnClickListener(new OnClickListener() {
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private  String mEmail;
-        private  String mPassword;
+        private final String mphone;
+        private final String mPassword;
 
-        UserLoginTask(String email, String password) {
-            this.mEmail = email;
-            this.mPassword = password;
+        UserLoginTask(String phone, String password) {
+            mphone = phone;
+            mPassword = password;
         }
 
         @Override
@@ -340,15 +327,14 @@ signupbutton.setOnClickListener(new OnClickListener() {
                 return false;
             }
 
-            if (mydb.checkifexists( this.mEmail, this.mPassword)){
-            mydb.updateUserLogout(1);
-               return true;
-            }
+          //  // register the new account here.
+            mydb = new DBHelper(SignUp.this);
+            Boolean inserted=mydb.insertContact(mphone, mPassword);
+if(inserted)
+    return true;
+else  return false;
 
 
-
-            // TODO: register the new account here.
-            return false;
         }
 
         @Override
@@ -357,7 +343,7 @@ signupbutton.setOnClickListener(new OnClickListener() {
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent = new Intent(SignUp.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             } else {

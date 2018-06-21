@@ -1,5 +1,8 @@
 package com.example.giovanni.crimenew;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,12 +10,15 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,7 +34,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-
+import	android.view.MenuInflater;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,7 +45,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-
+import android.util.DisplayMetrics;
 public class MainActivity extends AppCompatActivity {
 
 
@@ -54,8 +60,12 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinner;
     private Uri filePath;
     EditText location;
+
     EditText description;
     private DBHelper mydb ;
+
+    private View mProgressView;
+    private View crimeFormView;
 
 
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
@@ -75,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-
+        this.mydb = new DBHelper(MainActivity.this);
 
        btnsubmit=(Button) findViewById(R.id.buttonUpload);
         btn = (Button) findViewById(R.id.button);
@@ -84,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
         imageview = (ImageView) findViewById(R.id.iv);
         videoview=(VideoView) findViewById(R.id.videoview);
+        mProgressView = findViewById(R.id.upload_progress);
+        crimeFormView = findViewById(R.id.crimeform);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                uploadBitmap(bitmap);
+                uploadBitmap(MainActivity.this.bitmap);
             }
         });
 
@@ -116,6 +128,34 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_logout) {
+            logout();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    private void logout() {
+
+        try {
+            this.mydb.updateUserLogout(0);
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }catch(Exception e){
+            Toast.makeText(MainActivity.this," error: "+e.getMessage(),Toast.LENGTH_LONG).show();
+        }
+    }
     private void showPictureDialog(){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         pictureDialog.setTitle("Select Action");
@@ -168,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
                     String path = saveImage(bitmap);
                     Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
                     imageview.setImageBitmap(bitmap);
-                    this.bitmap=bitmap;
+                    MainActivity.this.bitmap=bitmap;
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -180,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             imageview.setImageBitmap(thumbnail);
 
-            this.bitmap=thumbnail;
+            MainActivity.this.bitmap=thumbnail;
             saveImage(thumbnail);
             Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }else if (requestCode == CAMERA_RECORD_VIDEO || requestCode == GALLERY_RECORD_VIDEO) {
@@ -191,9 +231,17 @@ public class MainActivity extends AppCompatActivity {
                 String path = data.getData().toString();
                 videoview.setVideoPath(path);
                 MediaController mediaController = new
-                        MediaController(this);
+                 MediaController(this);
                 mediaController.setAnchorView(videoview);
                 videoview.setMediaController(mediaController);
+                DisplayMetrics dm;
+               dm = new DisplayMetrics();
+               this.getWindowManager().getDefaultDisplay().getMetrics(dm);
+               int height = dm.heightPixels; int width = dm.widthPixels;
+                videoview.setMinimumWidth(width);
+                videoview.setMinimumHeight(height);
+
+
 
                 videoview.start();
 
@@ -290,12 +338,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void uploadBitmap(final Bitmap bitmap) {
-Cursor cursor=mydb.getData();
-        cursor.moveToFirst();
+        showProgress(false);
+     Cursor cursor=this.mydb.getData(1);
+        String phone_0;
+       if(cursor.moveToFirst())
+           phone_0=cursor.getString(cursor.getColumnIndex(DBHelper.CONTACTS_COLUMN_PHONE));
+       else phone_0="+256";
+        final String phone_=phone_0;
 
         //getting the tag from the edittext
         final String description_ = description.getText().toString().trim();
-        final String phone_ = cursor.getString(cursor.getColumnIndex(DBHelper.CONTACTS_COLUMN_EMAIL));
         final String location_ = location.getText().toString().trim();
         final String type_ = spinner.getSelectedItem().toString();
 
@@ -307,7 +359,8 @@ Cursor cursor=mydb.getData();
                     public void onResponse(NetworkResponse response) {
                         try {
                             JSONObject obj = new JSONObject(new String(response.data));
-                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Uploaded successfully!", Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 
@@ -351,6 +404,38 @@ Cursor cursor=mydb.getData();
 
         //adding the request to volley
         Volley.newRequestQueue(this).add(volleyMultipartRequest);
+    }
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            crimeFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            crimeFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    crimeFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            crimeFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
 
 }
