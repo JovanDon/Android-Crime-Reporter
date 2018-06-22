@@ -57,7 +57,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:text="Type of crime"
-                    android:textColor="@color/colorlabel"
+
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:layout_weight="0.60" />
 
@@ -66,7 +66,7 @@
                     android:layout_width="150dp"
                     android:layout_height="50dp"
 
-                    android:prompt="@string/spinner_title"
+
                     android:layout_weight="0.42" />
             </LinearLayout>
             <LinearLayout
@@ -84,7 +84,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:textColor="@color/colorlabel"
+
                     android:text="Case Descrption"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     />
@@ -115,7 +115,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:textColor="@color/colorlabel"
+
                     android:text="Location"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     />
@@ -152,7 +152,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:paddingTop="10dp"
-                        android:textColor="@color/colorlabel"
+
                         android:text="Select or Capture Image"
                         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -207,7 +207,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:text="Add Video"
-                        android:textColor="@color/colorlabel"
+
                         android:textAppearance="?android:attr/textAppearanceLarge" />
 
                     <Button

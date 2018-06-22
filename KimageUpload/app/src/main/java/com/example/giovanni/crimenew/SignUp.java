@@ -38,7 +38,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class SignUp extends AppCompatActivity{
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -52,7 +52,7 @@ public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor>
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mPhoneView;
+    private TextView mPhoneView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -60,10 +60,10 @@ public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.signup);
         // Set up the login form.
-        mPhoneView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+        mPhoneView = (TextView) findViewById(R.id.email);
+        //populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -77,7 +77,7 @@ public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor>
             }
         });
 
-        Button SignInButton = (Button) findViewById(R.id.sign_in_button);
+        TextView SignInButton = (TextView) findViewById(R.id.sign_in_button);
         SignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,13 +102,7 @@ public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor>
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
 
-        getLoaderManager().initLoader(0, null, this);
-    }
 
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -135,15 +129,8 @@ public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor>
     /**
      * Callback received when a permissions request has been completed.
      */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
+    //@Override
+
 
 
     /**
@@ -247,7 +234,7 @@ public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor>
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-
+    /*
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -263,9 +250,9 @@ public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor>
                 // Show primary email addresses first. Note that there won't be
                 // a primary email address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
+    }*/
 
-    @Override
+    //@Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
@@ -274,14 +261,14 @@ public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor>
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+        //addEmailsToAutoComplete(emails);
     }
 
-    @Override
+    //@Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
-
+    /*
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
@@ -289,7 +276,7 @@ public class SignUp extends AppCompatActivity implements LoaderCallbacks<Cursor>
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mPhoneView.setAdapter(adapter);
-    }
+    }*/
 
 
     private interface ProfileQuery {

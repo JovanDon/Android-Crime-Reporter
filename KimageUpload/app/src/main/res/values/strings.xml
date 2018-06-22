@@ -1,38 +1,3 @@
 <resources>
-    <string name="app_name">MBCRA</string>
-    <string-array name="options1_arrays">
-        <item>Traffic</item>
-        <item>Murder</item>
-        <item>Theft</item>
-        <item>Child Abuse</item>
-        <item>Drug Abuse</item>
-        <item>Demolition</item>
-    </string-array>
-    <string name="spinner_title">Crime type</string>
-    <string name="leku_title_activity_location_picker">Location Picker</string>
-    <string name="leku_load_location_error">Something went wrong. Please try again.</string>
-    <string name="leku_no_search_results">There are no results for your search</string>
-    <string name="leku_unknown_location">unknown location</string>
-    <string name="leku_voice_search_promp">Search by voice…</string>
-    <string name="leku_voice_search_extra_language">en-EN</string>
-    <string name="leku_toolbar_action_voice_title">Voice</string>
-    <string name="leku_search_hint">Search</string>
-    <string name="title_activity_login">MBCRA Sign in</string>
-
-    <!-- Strings related to login -->
-    <string name="prompt_email">phone</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="prompt_cpassword">Comfirm Password (optional)</string>
-    <string name="action_sign_in">Sign in </string>
-    <string name="action_sign_up">Sign up or register</string>
-
-    <string name="action_sign_in_short">Sign up</string>
-    <string name="error_invalid_email">This phone  address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="title_activity_sign_up">Sign Up</string>
+    <string name="app_name">mobile_material_screens</string>
 </resources>

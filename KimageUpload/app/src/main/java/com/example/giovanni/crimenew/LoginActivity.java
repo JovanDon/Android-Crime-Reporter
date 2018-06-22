@@ -40,7 +40,7 @@ import android.content.Intent;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity {
 
     private DBHelper mydb ;
     private static final int REQUEST_READ_CONTACTS = 0;
@@ -50,10 +50,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
+    //private View mProgressView;
+    //private View mLoginFormView;
     Cursor DataCursor;
 
 
@@ -71,12 +71,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 finish();
     }
 
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.login);
         // Set up the login form.
      // Toast.makeText(LoginActivity.this,DataCursor.getCount( )+"", Toast.LENGTH_LONG).show();
 
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.phone);
-        populateAutoComplete();
+        mEmailView = (EditText) findViewById(R.id.phone);
+        //populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-Button signupbutton= (Button)  findViewById(R.id.gotosignup);
+        TextView signupbutton= (TextView)  findViewById(R.id.gotosignup);
 signupbutton.setOnClickListener(new OnClickListener() {
     @Override
     public void onClick(View view) {
@@ -109,12 +109,12 @@ signupbutton.setOnClickListener(new OnClickListener() {
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        //mLoginFormView = findViewById(R.id.login_form);
+        //mProgressView = findViewById(R.id.login_progress);
 
 
     }
-
+    /*
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
@@ -122,7 +122,7 @@ signupbutton.setOnClickListener(new OnClickListener() {
 
         getLoaderManager().initLoader(0, null, this);
     }
-
+    */
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -148,7 +148,7 @@ signupbutton.setOnClickListener(new OnClickListener() {
     /**
      * Callback received when a permissions request has been completed.
      */
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_READ_CONTACTS) {
@@ -156,7 +156,7 @@ signupbutton.setOnClickListener(new OnClickListener() {
                 populateAutoComplete();
             }
         }
-    }
+    }*/
 
 
     /**
@@ -205,7 +205,7 @@ signupbutton.setOnClickListener(new OnClickListener() {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
+            //showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
@@ -228,30 +228,30 @@ signupbutton.setOnClickListener(new OnClickListener() {
     /**
      * Shows the progress UI and hides the login form.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    //@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    /*private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            //mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            //mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+             //       show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
+              //      mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            //    }
             });
 
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            //mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            //mProgressView.animate().setDuration(shortAnimTime).alpha(
+              //      show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
+                //    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            //    }
             });
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
@@ -259,8 +259,8 @@ signupbutton.setOnClickListener(new OnClickListener() {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-    }
-
+    }*/
+    /*
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -276,8 +276,8 @@ signupbutton.setOnClickListener(new OnClickListener() {
                 // Show primary email addresses first. Note that there won't be
                 // a primary email address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
+    }*/
+    /*
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
@@ -288,13 +288,13 @@ signupbutton.setOnClickListener(new OnClickListener() {
         }
 
         addEmailsToAutoComplete(emails);
-    }
+    }*/
 
-    @Override
+    //@Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
-
+    /*
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
@@ -351,7 +351,8 @@ signupbutton.setOnClickListener(new OnClickListener() {
             return false;
         }
 
-        @Override
+        //@Override
+       /*
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
@@ -370,7 +371,7 @@ signupbutton.setOnClickListener(new OnClickListener() {
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
-        }
+        }*/
     }
 }
 
