@@ -68,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
     private View crimeFormView;
 
 
-    public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -338,8 +336,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void uploadBitmap(final Bitmap bitmap) {
-        showProgress(false);
-     Cursor cursor=this.mydb.getData(1);
+
+     Cursor cursor=this.mydb.getData();
         String phone_0;
        if(cursor.moveToFirst())
            phone_0=cursor.getString(cursor.getColumnIndex(DBHelper.CONTACTS_COLUMN_PHONE));
@@ -360,17 +358,18 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             JSONObject obj = new JSONObject(new String(response.data));
                             //Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                            Toast.makeText(getApplicationContext(), "Uploaded successfully!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Uploaded successfully!", Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-
+                           // Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Uploaded successfully!", Toast.LENGTH_LONG).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Slow internet, Please Try ", Toast.LENGTH_LONG).show();
                     }
                 }) {
 

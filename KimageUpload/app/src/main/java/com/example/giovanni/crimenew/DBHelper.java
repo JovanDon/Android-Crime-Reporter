@@ -30,7 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         db.execSQL(
                 "create table contacts " +
-                        "(id integer primary key,phone text,password text, login INTEGER DEFAULT 0)"
+                        "(id integer  primary key AUTOINCREMENT,phone text,password text, login INTEGER DEFAULT 0)"
         );
     }
 
@@ -44,7 +44,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean insertContact (String phone,String password) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("id", 1);
+       //contentValues.put("id", 1);
         contentValues.put(CONTACTS_COLUMN_PHONE, phone);
         contentValues.put(CONTACTS_COLUMN_PASSWORD, password);
         contentValues.put(CONTACTS_COLUMN_LOGIN, 1);
@@ -52,9 +52,9 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public Cursor getData(int id) {
+    public Cursor getData() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from contacts where id="+id+"", null );
+        Cursor res =  db.rawQuery( "select * from contacts where 1", null );
         return res;
     }
 
@@ -90,11 +90,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public boolean updateUserLogout (int flag) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Integer id=1;
+
         ContentValues cv = new ContentValues();
         cv.put(CONTACTS_COLUMN_LOGIN, flag);
 
-        db.update("contacts", cv, "id = ? ", new String[] { Integer.toString(id) } );
+        db.update("contacts", cv, "1 ", new String[] {  } );
         return true;
     }
 

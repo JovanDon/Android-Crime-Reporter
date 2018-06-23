@@ -9,6 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/layer_3"
     tools:context=".LoginActivity">
 
     <!-- Login progress -->
@@ -31,52 +32,121 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Welcome, "
+                    android:textAllCaps="false"
+                    android:textColor="#fff"
+                    android:textSize="26sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="MBCRA"
+                    android:textAllCaps="false"
+                    android:textColor="#67e1ff"
+                    android:textSize="26sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="5dp"
+                android:padding="0dp"
+                android:src="@drawable/crime"/>
 
 
-                <AutoCompleteTextView
-                    android:id="@+id/phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
-                    android:maxLines="1"
-                    android:singleLine="true" />
 
+            <AutoCompleteTextView
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.03"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/shape_02"
+                android:drawablePadding="16dp"
+                android:ems="10"
+                android:hint="phone number"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:paddingLeft="10dp"
+                android:textColorHint="#fff"
+                android:textSize="16sp" />
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="#fff" />
 
             <EditText
-                android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/prompt_password"
-                android:imeActionId="6"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textPassword"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/shape_03"
+                android:drawablePadding="16dp"
+                android:ems="10"
+                android:hint="*  *  *  *  *  *  *  *  *  *  *  *  *  *"
+                android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:paddingLeft="10dp"
+                android:textColorHint="#fff"
+                android:textSize="16sp"
+                android:layout_weight="0.05"
+                android:id="@+id/password"
+                />
 
-
-
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="#fff" />
 
             <Button
-                android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
-                android:textStyle="bold" />
+                android:layout_height="70dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/rectangle_3"
+                android:clickable="true"
+                android:padding="16dp"
+                android:text="login"
+                android:textAllCaps="true"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:id="@+id/email_sign_in_button"
+                />
+
+
 
 
             <Button
                 android:id="@+id/gotosignup"
-                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_sign_up"
-                android:textStyle="bold" />
-
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:text="create new account"
+                android:textAllCaps="true"
+                android:background="@android:color/transparent"
+                android:textColor="#fff"
+                android:textSize="10sp"/>
 
 
         </LinearLayout>

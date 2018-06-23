@@ -62,7 +62,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
 
         mydb = new DBHelper(this);
-         DataCursor = mydb.getData(1);
+         DataCursor = mydb.getData();
+        DataCursor.moveToFirst();
 // if account exists go  to Main activity directly
     if (mydb.isLoggedIn(1)){
 
